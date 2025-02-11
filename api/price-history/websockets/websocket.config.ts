@@ -1,6 +1,6 @@
 export const WEBSOCKET_CONFIG = {
     cors: {
-        origin: 'https://jukebar.ovh',
+        origin: '*',
     },
     namespace: '/price-updates',
 };

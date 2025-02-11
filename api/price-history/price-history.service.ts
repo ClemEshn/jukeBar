@@ -139,20 +139,24 @@ export class PriceHistoryService {
     }
     var isSaved : boolean = false;
     var res;
-    toSave.sort((a, b) => a.number - b.number); 
-    toSave.forEach(async priceToSave => {
-      if(id === priceToSave.number - 1 && !isSaved){
-        res = this.priceRepository.save(newPrice);
-        isSaved = true;
-      }
-      
-      this.priceRepository.save(priceToSave);
-      if(id === priceToSave.number + 1 && !isSaved){
-        res = this.priceRepository.save(newPrice);
-        isSaved = true;
-      }
-
-    });
+    if(toSave){
+      toSave.sort((a, b) => a.number - b.number);
+      toSave.forEach(async priceToSave => {
+        if(id === priceToSave.number - 1 && !isSaved){
+          res = await this.priceRepository.save(newPrice);
+          isSaved = true;
+        }
+        
+        await this.priceRepository.save(priceToSave);
+        if(id === priceToSave.number + 1 && !isSaved){
+          res = await this.priceRepository.save(newPrice);
+          isSaved = true;
+        }
+      });
+    }
+    else{
+      await this.priceRepository.save(newPrice);
+    }
     return res;
   }
 
