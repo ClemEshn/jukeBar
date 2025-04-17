@@ -11,7 +11,7 @@ async function bootstrap() {
     transform: true,
   }));
   app.enableShutdownHooks();
-  // app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api');//prod
   app.enableCors({
     // origin: '*',
     origin: ['https://jukebar.ovh', 'https://www.jukebar.ovh'],
