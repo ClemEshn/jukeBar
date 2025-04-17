@@ -7,13 +7,12 @@ import { PriceHistory } from './entities/price-history.entity';
 import { Event } from '../event/entities/event.entity';
 import { WebSocketService } from './websockets/websocket.service';
 import { PriceHistoryGateway } from './websockets/websocket.gateway';
-import { TestGateway } from './websockets/test.gateway';
 import { EventDrinksPairsService } from 'event-drinks-pairs/event-drinks-pairs.service';
 import { EventDrinksPairsModule } from 'event-drinks-pairs/event-drinks-pairs.module';
 
 @Module({
   controllers: [PriceHistoryController],
-  providers: [PriceHistoryService, PriceHistoryGateway, WebSocketService, TestGateway],
+  providers: [PriceHistoryService, PriceHistoryGateway, WebSocketService],
   imports: [TypeOrmModule.forFeature([Event, PriceHistory, EventDrinksPair, WebSocketService, PriceHistoryService]), EventDrinksPairsModule],
   exports: [PriceHistoryGateway],
 })

@@ -179,7 +179,7 @@ export default function GenerateGraphs(props: DrinkPairProps) {
       {
         label: drinkPair?.drinkTwoName || `Drink 2 - Pair ${pairId}`,
         data: pairPrices.map((price) => price.price_drink_2),
-        borderColor: `hsl(${pairsColors[index] + 30}, 70%, 50%)`,
+        borderColor: `hsl(${pairsColors[index] + 60}, 70%, 50%)`,
       },
     ];
   });

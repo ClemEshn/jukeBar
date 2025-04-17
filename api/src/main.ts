@@ -11,12 +11,12 @@ async function bootstrap() {
     transform: true,
   }));
   app.enableShutdownHooks();
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api');//prod
   app.enableCors({
-    // origin: ['*'],
+    // origin: '*',
     origin: ['https://jukebar.ovh', 'https://www.jukebar.ovh'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    credentials: false,
   });
   await app.listen(5000);
 }

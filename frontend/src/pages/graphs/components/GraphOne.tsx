@@ -63,12 +63,12 @@ export default function GenerateGraphOne(props: DrinkPairProps) {
   }, [props.drinks]);
 
   useEffect(() => {
-    const socket = io("http://localhost:5201"); 
-    // const socket = io("https://jukebar.ovh", {
-    //   path: "/socket.io/",
-    //   transports: ["websocket"],
-    //   withCredentials: true,
-    // });    
+    // const socket = io("http://localhost:5201",{
+    const socket = io("https://jukebar.ovh", {
+      path: "/socket.io/",
+      transports: ["websocket"],
+      withCredentials: true,
+    });    
     socket.on("price-updates", (newPrice: PriceHistoryDTO) => {
       setPrices((prevPrices) => {
         console.log(prevPrices);
@@ -164,7 +164,7 @@ export default function GenerateGraphOne(props: DrinkPairProps) {
     const dataset2 = {
       label: drinkPair?.drinkTwoName || `Drink 2 - Pair ${pairId}`,
       data: pairPrices.map((price) => price.price_drink_2),
-      borderColor: `hsl(${pairsColors[index] + 30}, 70%, 50%)`,
+      borderColor: `hsl(${pairsColors[index] + 60}, 70%, 50%)`,
     };
     return [dataset1, dataset2];
   });
