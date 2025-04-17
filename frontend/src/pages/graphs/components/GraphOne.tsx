@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import {
   Chart as ChartJS,
   CategoryScale,
