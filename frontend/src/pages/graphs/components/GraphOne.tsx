@@ -63,8 +63,8 @@ export default function GenerateGraphOne(props: DrinkPairProps) {
   }, [props.drinks]);
 
   useEffect(() => {
-    const socket = io("http://localhost:5201",{
-    // const socket = io("https://jukebar.ovh", {
+    // const socket = io("http://localhost:5201",{
+    const socket = io("https://jukebar.ovh", {
       path: "/socket.io/",
       transports: ["websocket"],
       withCredentials: true,

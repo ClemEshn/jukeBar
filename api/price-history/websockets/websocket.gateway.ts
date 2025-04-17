@@ -9,7 +9,7 @@ import {
   
 @WebSocketGateway(5201, {
   cors: {
-    origin: ['http://localhost:5173', 'https://jukebar.ovh', 'http://www.jukebar.ovh'],
+    origin: ['https://jukebar.ovh', 'http://www.jukebar.ovh'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
