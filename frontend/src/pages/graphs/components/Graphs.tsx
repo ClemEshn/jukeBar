@@ -61,7 +61,7 @@ export default function GenerateGraphs(props: DrinkPairProps) {
   const [showTable, setShowTable] = useState(true);
   const numberOfDrinks = useRef<number>(0);
   const shiftLabels = useRef<boolean>(false);
-  const socketUrl = import.meta.env.SOCKET_URL;
+  const socketUrl = import.meta.env.VITE_SOCKET_URL;
 
   useEffect(() => {
     numberOfDrinks.current = props.drinks.length;
@@ -73,7 +73,7 @@ export default function GenerateGraphs(props: DrinkPairProps) {
     const socket = io(socketUrl, {
       path: "/socket.io/",
       transports: ["websocket"],
-      withCredentials: true,
+      withCredentials: false,
     });    
     socket.on("price-updates", (newPrice: PriceHistoryDTO) => {
     setPrices((prevPrices) => {

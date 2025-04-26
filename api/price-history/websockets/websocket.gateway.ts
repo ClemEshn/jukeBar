@@ -6,16 +6,9 @@
       OnGatewayInit,
     } from '@nestjs/websockets';
     import { Server } from 'socket.io';
+    import { WEBSOCKET_CONFIG } from './websocket.config';
 
-  @WebSocketGateway(5201, {
-    cors: {
-      origin: process.env.NODE_ENV === 'PROD'
-        ? ['https://jukebar.ovh', 'https://www.jukebar.ovh']
-        : '*',
-      methods: ['GET', 'POST'],
-      credentials: true,
-    },
-  })
+  @WebSocketGateway(5201, WEBSOCKET_CONFIG)
   export class PriceHistoryGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
       @WebSocketServer()
       server: Server;

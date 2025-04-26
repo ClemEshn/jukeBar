@@ -28,13 +28,13 @@ export default function GenerateGraphTwo(props: DrinkPairProps) {
   const [prices, setPrices] = useState<PriceHistoryDTO[]>([]);
   const [priceChanges, setPriceChanges] = useState<Record<number, { drink1: string; drink2: string }>>({});
   const [drinks, setDrinks] = useState<Drink[]>([]);
-  const socketUrl = import.meta.env.SOCKET_URL;
+  const socketUrl = import.meta.env.VITE_SOCKET_URL;
 
   useEffect(() => {
     const socket = io(socketUrl, {
       path: "/socket.io/",
       transports: ["websocket"],
-      withCredentials: true,
+      withCredentials: false,
     });    
     socket.on("price-updates", (newPrice: PriceHistoryDTO) => {
       setPrices((prevPrices) => {

@@ -11,10 +11,10 @@ async function bootstrap() {
   }));
   console.log(process.env.NODE_ENV);
   app.enableShutdownHooks();
-  if (process.env.NODE_ENV === 'PROD') {
+  if (process.env.NODE_ENV === 'production') {
     app.setGlobalPrefix('api');
   }
-  if (process.env.NODE_ENV === 'PROD') {
+  if (process.env.NODE_ENV === 'production') {
     app.enableCors({
       origin: ['https://jukebar.ovh', 'https://www.jukebar.ovh'],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
