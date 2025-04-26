@@ -61,13 +61,16 @@ export default function GenerateGraphs(props: DrinkPairProps) {
   const [showTable, setShowTable] = useState(true);
   const numberOfDrinks = useRef<number>(0);
   const shiftLabels = useRef<boolean>(false);
-  
+  const socketUrl = import.meta.env.SOCKET_URL;
+
   useEffect(() => {
     numberOfDrinks.current = props.drinks.length;
   }, [props.drinks]);
 
+  
+
   useEffect(() => {
-    const socket = io("https://jukebar.ovh", {
+    const socket = io(socketUrl, {
       path: "/socket.io/",
       transports: ["websocket"],
       withCredentials: true,

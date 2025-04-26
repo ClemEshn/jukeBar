@@ -17,7 +17,7 @@ import { EventDrinksPairsModule } from 'event-drinks-pairs//event-drinks-pairs.m
 import { PriceHistoryModule } from '../price-history/price-history.module';
 import { PriceHistory } from '../price-history/entities/price-history.entity';
 import {PriceHistoryGateway} from 'price-history/websockets/websocket.gateway'
-
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -30,6 +30,9 @@ import {PriceHistoryGateway} from 'price-history/websockets/websocket.gateway'
       database: 'jukebar',
       entities: [Event, Drink, User, EventDrinksPair, PriceHistory],
       synchronize: true,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
   DrinkModule, EventModule, UsersModule, EventDrinksPairsModule, PriceHistoryModule, JwtModule
   ],

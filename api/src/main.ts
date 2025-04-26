@@ -1,7 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -10,14 +9,24 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
     transform: true,
   }));
+  console.log(process.env.NODE_ENV);
   app.enableShutdownHooks();
-  app.setGlobalPrefix('api');//prod
-  app.enableCors({
-    // origin: '*',
-    origin: ['https://jukebar.ovh', 'https://www.jukebar.ovh'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: false,
-  });
+  if (process.env.NODE_ENV === 'PROD') {
+    app.setGlobalPrefix('api');
+  }
+  if (process.env.NODE_ENV === 'PROD') {
+    app.enableCors({
+      origin: ['https://jukebar.ovh', 'https://www.jukebar.ovh'],
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: false,
+    });
+  } else {
+    app.enableCors({
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: false,
+    });
+  }
   await app.listen(5000);
 }
 bootstrap();

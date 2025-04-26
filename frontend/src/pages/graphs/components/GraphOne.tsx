@@ -16,6 +16,7 @@ import { GraphOneOptions, pairsColors } from "./GraphOneOptions";
 import { PriceHistoryDTO } from "../../../models/Price-history";
 import { NUMBER_OF_DATAPOINTS_TO_KEEP } from "../../../const/const";
 
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -57,14 +58,15 @@ export default function GenerateGraphOne(props: DrinkPairProps) {
   const [existingLabels] = useState<string[]>([]);
   const numberOfDrinks = useRef<number>(0);
   const shiftLabels = useRef<boolean>(false);
+  const socketUrl = import.meta.env.SOCKET_URL;
 
   useEffect(() => {
     numberOfDrinks.current = props.drinks.length;
   }, [props.drinks]);
 
+  
   useEffect(() => {
-    // const socket = io("http://localhost:5201",{
-    const socket = io("https://jukebar.ovh", {
+    const socket = io(socketUrl, {
       path: "/socket.io/",
       transports: ["websocket"],
       withCredentials: true,
