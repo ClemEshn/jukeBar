@@ -7,7 +7,7 @@ export const GraphOneOptions = {
       labels: {
         color: 'white',
         font: {
-          size: 12,
+          size: 18,
         },
       },
     },
@@ -29,7 +29,7 @@ export const GraphOneOptions = {
       },
       ticks: {
         font: {
-          size: 12,
+          size: 24,
           family: 'Roboto Mono, monospace',
         },
         color: 'white',
@@ -41,7 +41,7 @@ export const GraphOneOptions = {
       },
       ticks: {
         font: {
-          size: 12,
+          size: 18,
           family: 'Roboto Mono, monospace',
         },
         color: 'white',
