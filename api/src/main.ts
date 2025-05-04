@@ -22,7 +22,7 @@ async function bootstrap() {
     });
   } else {
     app.enableCors({
-      origin: '*',
+      origin: ['http://localhost:5173', 'http://localhost:5201'],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: false,
     });
