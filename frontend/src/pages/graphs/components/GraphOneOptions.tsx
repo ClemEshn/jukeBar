@@ -67,11 +67,16 @@ export const GraphOneOptions = {
 };
 
 
-  export const pairsColors = [
-    120, // Green (positive/stock growth theme)
-    0,   // Red (negative/stock drop theme)
-    45,  // Gold (neutral or highlight)
-    220, // Blue (calm or informational)
-    280, // Purple (miscellaneous)
-  ];
-  
+export const pairsColors = [
+  100,
+  0,
+  45,
+  340,
+];
+
+export const pairsColors2 = [
+  280,
+  30,
+  190,
+  240,
+];

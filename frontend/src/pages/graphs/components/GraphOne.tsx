@@ -12,7 +12,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import { GraphOneOptions, pairsColors } from "./GraphOneOptions";
+import { GraphOneOptions, pairsColors, pairsColors2 } from "./GraphOneOptions";
 import { PriceHistoryDTO } from "../../../models/Price-history";
 import { NUMBER_OF_DATAPOINTS_TO_KEEP } from "../../../const/const";
 
@@ -175,7 +175,7 @@ export default function GenerateGraphOne(props: DrinkPairProps) {
       {
         label: drinkPair?.drinkTwoName || `Drink 2 - Pair ${pairId}`,
         data: pairPrices.map((price) => price.price_drink_2),
-        borderColor: `hsl(${(pairsColors[colorIndex] + 60) % 360}, 70%, 50%)`,
+        borderColor: `hsl(${(pairsColors2[colorIndex])}, 70%, 50%)`,
         backgroundColor: 'transparent',
         tension: 0.1,
         fill: false,
