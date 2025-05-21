@@ -74,7 +74,10 @@ export default function GenerateGraphs(props: DrinkPairProps) {
       path: "/socket.io/",
       transports: ["websocket"],
       withCredentials: false,
-    });    
+    });
+    socket.on("disconnect", () => {
+      window.location.reload();
+    });  
     socket.on("price-updates", (newPrice: PriceHistoryDTO) => {
       const processedPrice = {
         ...newPrice,
