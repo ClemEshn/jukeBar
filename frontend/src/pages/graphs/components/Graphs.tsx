@@ -12,7 +12,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import { GraphOneOptions, pairsColors } from "./GraphOneOptions";
+import { GraphOneOptions, pairsColors, pairsColors2 } from "./GraphOneOptions";
 import { PriceHistoryDTO } from "../../../models/Price-history";
 import { NUMBER_OF_DATAPOINTS_TO_KEEP } from "../../../const/const";
 
@@ -57,7 +57,7 @@ export default function GenerateGraphs(props: DrinkPairProps) {
   const [prices, setPrices] = useState<PriceHistoryDTO[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [drinks, setDrinks] = useState<Drinks[]>([]);
-  const [existingLabels] = useState<string[]>([]);
+  const existingLabels = useRef<string[]>([]);
   const [showTable, setShowTable] = useState(true);
   const numberOfDrinks = useRef<number>(0);
   const shiftLabels = useRef<boolean>(false);
@@ -76,13 +76,18 @@ export default function GenerateGraphs(props: DrinkPairProps) {
       withCredentials: false,
     });    
     socket.on("price-updates", (newPrice: PriceHistoryDTO) => {
-    setPrices((prevPrices) => {
-        const updatedPrices = [...prevPrices, newPrice];
-        // replace with code to remove first data after a certain quantity
+      const processedPrice = {
+        ...newPrice,
+        price_drink_1: Number(newPrice.price_drink_1),
+        price_drink_2: Number(newPrice.price_drink_2),
+      };
+
+      setPrices((prevPrices) => {
+        const updatedPrices = [...prevPrices, processedPrice];
+        
         if (updatedPrices.length > NUMBER_OF_DATAPOINTS_TO_KEEP * numberOfDrinks.current) {
-          for(let i = 0;i++;i < NUMBER_OF_DATAPOINTS_TO_KEEP){
-              updatedPrices.shift();
-          }
+          const toRemove = updatedPrices.length - NUMBER_OF_DATAPOINTS_TO_KEEP * numberOfDrinks.current;
+          updatedPrices.splice(0, toRemove);
           shiftLabels.current = true;
         }
         
@@ -111,16 +116,14 @@ export default function GenerateGraphs(props: DrinkPairProps) {
       });
       setLabels((prevLabels) => {
         const newDate = new Date(newPrice.time);
-        var minutes = String(newDate.getMinutes());
-        if(Number(minutes) < 10){
-          minutes = "0" + newDate.getMinutes();
-        }
-        const newLabel =  `${newDate.getHours()}:${minutes}`;
+        const minutes = String(newDate.getMinutes()).padStart(2, '0');
+        const newLabel = `${newDate.getHours()}:${minutes}`;
     
-        if(existingLabels.indexOf(String(newDate)) === -1){
+        if (!existingLabels.current.includes(String(newDate))) {
           const updatedLabel = [...prevLabels, newLabel];
-          existingLabels.push(String(newDate));
-          if(shiftLabels.current === true){
+          existingLabels.current.push(String(newDate));
+          
+          if (shiftLabels.current) {
             shiftLabels.current = false;
             updatedLabel.shift();
           }
@@ -145,45 +148,53 @@ export default function GenerateGraphs(props: DrinkPairProps) {
     setPrices(props.prices || []);
     setDrinks(props.drinks || []);
     setMaxPrices(props.maxPrices || []);
-    const groupedLabels = (props.prices || []).filter(function(price){
-      if(existingLabels.indexOf(String(price.time)) === -1){
-        existingLabels.push(String(price.time));
-        return true;
-      }
-      return false;
-    });
-    const initialLabels = (groupedLabels).map((price) => {
-      const date = new Date(price.time);
-      var minutes = String(date.getMinutes());
-      if(Number(minutes) < 10){
-        minutes = "0" + date.getMinutes();
-      }
-      return `${date.getHours()}:${minutes}`;
-    });
+    const initialLabels = (props.prices || [])
+      .filter(price => {
+        if (!existingLabels.current.includes(String(price.time))) {
+          existingLabels.current.push(String(price.time));
+          return true;
+        }
+        return false;
+      })
+      .map(price => {
+        const date = new Date(price.time);
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${date.getHours()}:${minutes}`;
+      });
+
     setLabels(initialLabels);
-    
   }, [props.prices, props.drinks]);
 
   const groupedPrices = prices.reduce((acc, price) => {
-    acc[price.pairId] = acc[price.pairId] || [];
-    acc[price.pairId].push(price);
+    const { pairId } = price;
+    if (!acc[pairId]) {
+      acc[pairId] = [];
+    }
+    acc[pairId].push(price);
     return acc;
   }, {} as Record<number, PriceHistoryDTO[]>);
 
   const datasets = Object.entries(groupedPrices).flatMap(([pairId, pairPrices], index) => {
     const drinkPair = drinks.find((drink) => drink.pairId === Number(pairId));
+    const colorIndex = index % pairsColors.length;
 
     return [
       {
         label: drinkPair?.drinkOneName || `Drink 1 - Pair ${pairId}`,
         data: pairPrices.map((price) => price.price_drink_1),
-        borderColor: `hsl(${pairsColors[index]}, 70%, 50%)`,
+        borderColor: `hsl(${pairsColors[colorIndex]}, 70%, 50%)`,
+        backgroundColor: 'transparent',
+        tension: 0.1,
+        fill: false,
       },
       {
         label: drinkPair?.drinkTwoName || `Drink 2 - Pair ${pairId}`,
         data: pairPrices.map((price) => price.price_drink_2),
-        borderColor: `hsl(${pairsColors[index] + 60}, 70%, 50%)`,
-      },
+        borderColor: `hsl(${(pairsColors2[colorIndex])}, 70%, 50%)`,
+        backgroundColor: 'transparent',
+        tension: 0.1,
+        fill: false,
+      }
     ];
   });
 
